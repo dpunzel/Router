@@ -1,5 +1,4 @@
 import java.util.*;
-
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -8,15 +7,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
-
 /**
- *
- */
-
-/**
- * @author njensen12
- *
+ * @author CSIS350 Group
+ * David Punzel, Gohar Robert, Nicholas Jensen
+ * Class Router - adds, deletes, and lookup
+ * of IP address and route. Uses CIDR notation
+ * to get IP ranges and adds to ArrayList for
+ * retrieval.
  */
 public class Router
 {
@@ -30,21 +27,24 @@ public class Router
    private InetAddress startAddress;
    private InetAddress endAddress;
    private int prefixLength;
-   public int _route;
-
-
-
+   private int _route;
    public ArrayList<String[]> storage = new ArrayList<>();
-
-   //
    String sIP;
    String eIP;
 
+   /**
+    * Constructor router
+    */
    public Router() {
 
    }
 
-   public void commandSplit(String cmd) throws UnknownHostException {
+   /**
+    *
+    * @param cmd
+    * @throws UnknownHostException
+    */
+   private void commandSplit(String cmd) throws UnknownHostException {
       String[] tempSplit = cmd.split("\\s");
       String[] ipSplitTemp = tempSplit[1].split("=");
       _operationCmd = tempSplit[0];
@@ -65,12 +65,20 @@ public class Router
       return lookUpSplit[1];
    }
 
-   public String getNetworkAddress() {
+   /**
+    * Helper method for ParseCmd
+    * @return Network Address
+    */
+   private String getNetworkAddress() {
 
       return this.startAddress.getHostAddress();
    }
 
-   public String getBroadcastAddress() {
+   /**
+    *
+    * @return
+    */
+   private String getBroadcastAddress() {
       return this.endAddress.getHostAddress();
    }
 
@@ -131,7 +139,16 @@ public class Router
       return byteReturnOctect;
    }
 
-   public ArrayList<String[]> addIpRangesWithMaskRoute(String startIP, String endIP, String mask, String route, String cidr) {
+   /**
+    *
+    * @param startIP
+    * @param endIP
+    * @param mask
+    * @param route
+    * @param cidr
+    * @return
+    */
+   private ArrayList<String[]> addIpRangesWithMaskRoute(String startIP, String endIP, String mask, String route, String cidr) {
       String[] IPAddress = new String[5];
       IPAddress[0] = startIP;
       IPAddress[1] = endIP;
@@ -144,7 +161,12 @@ public class Router
       return storage;
    }
 
-   public String convertIpToDecimal(String ip) {
+   /**
+    *
+    * @param ip
+    * @return
+    */
+   private String convertIpToDecimal(String ip) {
       String ipAddress = ip;
       String[] addrArray = ipAddress.split("\\.");
 
@@ -159,7 +181,12 @@ public class Router
       return String.valueOf(ipDecimal);
    }
 
-   public long convertIpToDecimalLongh(String ip) {
+   /**
+    *
+    * @param ip
+    * @return
+    */
+   private long convertIpToDecimalLongh(String ip) {
       String ipAddress = ip;
       String[] addrArray = ipAddress.split("\\.");
 
@@ -174,11 +201,23 @@ public class Router
       return ipDecimal;
    }
 
-   public boolean compareToLookUp(long startIP, long endIP, long lookUpIP) {
+   /**
+    *
+    * @param startIP
+    * @param endIP
+    * @param lookUpIP
+    * @return
+    */
+   private boolean compareToLookUp(long startIP, long endIP, long lookUpIP) {
       return (startIP<=lookUpIP && lookUpIP<=endIP);
    }
 
-   public int lookUp(long lookUpIP) {
+   /**
+    *
+    * @param lookUpIP
+    * @return
+    */
+   private int lookUp(long lookUpIP) {
       String route = "-99";
       boolean done = false;
       int i = 0;
@@ -228,7 +267,13 @@ public class Router
       return index;
    }
 
-   public boolean isInRange(String ipAddress) throws UnknownHostException {
+   /**
+    *
+    * @param ipAddress
+    * @return
+    * @throws UnknownHostException
+    */
+   private boolean isInRange(String ipAddress) throws UnknownHostException {
       InetAddress address = InetAddress.getByName(ipAddress);
       BigInteger start = new BigInteger(1, this.startAddress.getAddress());
       BigInteger end = new BigInteger(1, this.endAddress.getAddress());
@@ -240,6 +285,12 @@ public class Router
       return (ipStartingRange == -1 || ipStartingRange == 0) && (ipEndingRange == -1 || ipEndingRange == 0);
    }
 
+   /**
+    *
+    * @param cmd
+    * @return
+    * @throws UnknownHostException
+    */
    public int parseCmd(String cmd) throws UnknownHostException {
       if (cmd.contains("ADD") || cmd.contains("DEL")) {
          commandSplit(cmd);
@@ -283,6 +334,7 @@ public class Router
 
    /**
     * @param args
+    * @throws java.net.UnknownHostException
     */
    public static void main(String[] args) throws UnknownHostException {
       Router router = new Router();
