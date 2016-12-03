@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author CSIS350 Group
@@ -291,52 +293,62 @@ public class Router
     * @return
     * @throws UnknownHostException
     */
-   public int parseCmd(String cmd) throws UnknownHostException {
-      if (cmd.contains("ADD") || cmd.contains("DEL")) {
-         commandSplit(cmd);
-      }
-      else
-      {
-         _operationCmd = "LOOKUP";
-      }
+   public int parseCmd(String cmd){
+      try {
+         if (cmd.contains("ADD") || cmd.contains("DEL")) {
+            try {
+               commandSplit(cmd);
+            } catch (UnknownHostException ex) {
+               Logger.getLogger(Router.class.getName()).log(Level.SEVERE, null, ex);
+            }
+         }
+         else
+         {
+            _operationCmd = "LOOKUP";
+         }
 
-      //calculate();
+         //calculate();
 
-      switch (_operationCmd)
-      {
-         case "ADD":
-            calculate();
-            addIpRangesWithMaskRoute(sIP, eIP, _mask, _routerRoute, _cidrNotation);
-            System.out.println(_route = 1);
-            break;
-
-         case "DEL":
-            if (contains(convertIpToDecimalLongh(_ipAddress))) {
-               int index = delSearch(_ipAddress);
-               storage.remove(index);
+         switch (_operationCmd)
+         {
+            case "ADD":
+               calculate();
+               addIpRangesWithMaskRoute(sIP, eIP, _mask, _routerRoute, _cidrNotation);
                System.out.println(_route = 1);
-            }
-            else {
-               System.out.println(_route = 0);
-            }
-            break;
+               break;
 
-         case "LOOKUP":
-            _route = lookUp(convertIpToDecimalLongh(_ipAddress = lookUpSplit(cmd)));
-            System.out.println(_route);
-            break;
+            case "DEL":
+               if (contains(convertIpToDecimalLongh(_ipAddress))) {
+                  int index = delSearch(_ipAddress);
+                  storage.remove(index);
+                  System.out.println(_route = 1);
+               }
+               else {
+                  System.out.println(_route = 0);
+               }
+               break;
 
-      } // switch
+            case "LOOKUP":
+               _route = lookUp(convertIpToDecimalLongh(_ipAddress = lookUpSplit(cmd)));
+               System.out.println(_route);
+               break;
 
+         } // switch
+
+
+      } // parseCmd
+      catch (UnknownHostException ex) {
+         Logger.getLogger(Router.class.getName()).log(Level.SEVERE, null, ex);
+      }
       return _route;
-   } // parseCmd
+   }
 
 
    /**
     * @param args
     * @throws java.net.UnknownHostException
     */
-   public static void main(String[] args) throws UnknownHostException {
+   public static void main(String[] args){
       Router router = new Router();
       //router.add("157.29.32.0/20, route=1");
       router.parseCmd("ADD prefix=157.29.32.0/20, route=1");
