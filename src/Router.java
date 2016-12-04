@@ -33,6 +33,7 @@ public class Router
    public ArrayList<String[]> storage = new ArrayList<>();
    String sIP;
    String eIP;
+   String route = "0";
 
    /**
     * Constructor router
@@ -220,31 +221,25 @@ public class Router
     * @return
     */
    private int lookUp(long lookUpIP) {
-      String route = "-99";
-      boolean done = false;
-      int i = 0;
-
-      while (i < storage.size() && !done) {
+      route = "0";
+      String temp = "0";
+      for (int i = 0; i < storage.size();i++) {
          if (compareToLookUp(convertIpToDecimalLongh(storage.get(i)[0]), convertIpToDecimalLongh(storage.get(i)[1]), lookUpIP)) {
-            done = true;
-            if (done) {
-               route =(storage.get(i)[3]);
+            if (Integer.parseInt(temp) <= Integer.parseInt((storage.get(i)[2]))) {
+               temp = (storage.get(i)[2]);
+               route = (storage.get(i)[3]);
             }
+
          }
-         i++;
-      }
-      if (!done) {
-         route = "0";
       }
       return Integer.parseInt(route);
    }
 
-   private boolean contains(long lookUpIp) {
+   private boolean contains(String lookUpIp) {
       boolean found = false;
       int i = 0;
-
       while (i < storage.size() && !found) {
-         if (compareToLookUp(convertIpToDecimalLongh(storage.get(i)[0]), convertIpToDecimalLongh(storage.get(i)[1]), lookUpIp)) {
+         if (storage.get(i)[4].equals(lookUpIp)) {
             found = true;
          }
          i++;
@@ -256,13 +251,9 @@ public class Router
       boolean found = false;
       int i = 0;
       int index = -99;
-
       while (i < storage.size() && !found) {
-         if (compareToLookUp(convertIpToDecimalLongh(storage.get(i)[0]), convertIpToDecimalLongh(storage.get(i)[1]), convertIpToDecimalLongh(ip))) {
-            found = true;
-            if (found) {
-               index = i;
-            }
+         if (storage.get(i)[4].contains(ip)) {
+            index = i;
          }
          i++;
       }
@@ -318,8 +309,8 @@ public class Router
                break;
 
             case "DEL":
-               if (contains(convertIpToDecimalLongh(_ipAddress))) {
-                  int index = delSearch(_ipAddress);
+               if (contains(_cidrNotation)) {
+                  int index = delSearch(_cidrNotation);
                   storage.remove(index);
                   System.out.println(_route = 1);
                }
