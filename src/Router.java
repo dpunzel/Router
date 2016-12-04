@@ -341,7 +341,6 @@ public class Router
     */
    public static void main(String[] args){
       Router router = new Router();
-      //router.add("157.29.32.0/20, route=1");
       router.parseCmd("ADD prefix=157.29.32.0/20, route=1");
       router.parseCmd("ADD prefix=157.29.48.0/21, route=2");
       router.parseCmd("ADD prefix=157.29.48.0/20, route=3");
