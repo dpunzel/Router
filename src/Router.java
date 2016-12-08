@@ -19,6 +19,7 @@ import java.util.logging.Logger;
  */
 public class Router
 {
+   // create variables to use thourgh out the program
    private String _routerRoute;
    private String _cidrNotation;
    private String _ipAddress;
@@ -37,14 +38,16 @@ public class Router
 
    /**
     * Constructor router
+    * Only here because we have to have it
     */
-   public Router() {
+   private Router() {
 
    }
 
    /**
-    *
-    * @param cmd
+    * parses the command into useable strings and stores them in an array.
+    * @param cmd this is the variable that has has an operation (add, delete, lookup), ip in standard form with mask
+    * and route number unless it is an lookup operation then it only has the ip address
     * @throws UnknownHostException
     */
    private void commandSplit(String cmd) throws UnknownHostException {
@@ -62,7 +65,9 @@ public class Router
       inetAddress = InetAddress.getByName(_ipAddress);
       prefixLength = Integer.parseInt(_mask);
    }
-
+   /*
+   * @param cmd 
+   */
    private String lookUpSplit(String cmd) {
       String[] lookUpSplit = cmd.split("=");
       return lookUpSplit[1];
