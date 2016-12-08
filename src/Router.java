@@ -43,8 +43,8 @@ public class Router
    }
 
    /**
-    *
-    * @param cmd
+    * This method makes the data in cmd usable by breaking it up on different sections 
+    * @param cmd this variable contains three operations and ips 
     * @throws UnknownHostException
     */
    private void commandSplit(String cmd) throws UnknownHostException {
@@ -272,41 +272,38 @@ public class Router
             _operationCmd = "LOOKUP";
          }
 
-         //calculate();
-
          switch (_operationCmd)
          {
             case "ADD":
                calculate();
                addIpRangesWithMaskRoute(sIP, eIP, _mask, _routerRoute,
                        _cidrNotation);
-               System.out.println(_route = 1);
+               _route = 1;
                break;
 
             case "DEL":
                if (contains(_cidrNotation)) {
                   int index = delSearch(_cidrNotation);
                   storage.remove(index);
-                  System.out.println(_route = 1);
+                  _route = 1;
                }
                else {
-                  System.out.println(_route = 0);
+                  _route = 0;
                }
                break;
 
             case "LOOKUP":
                _route = lookUp(convertIpToDecimalLongh(_ipAddress = lookUpSplit
                        (cmd)));
-               System.out.println(_route);
+               _route;
                break;
 
          } // switch
 
-
       } // try catch block
       catch (UnknownHostException ex) {
          Logger.getLogger(Router.class.getName()).log(Level.SEVERE, null, ex);
-      }
+      } // catch
       return _route;
    } // parseCmd
 } // Router
