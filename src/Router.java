@@ -19,6 +19,7 @@ import java.util.logging.Logger;
  */
 public class Router
 {
+   // insintatize variables to be used through out the program.  
    private String _routerRoute;
    private String _cidrNotation;
    private String _ipAddress;
@@ -63,11 +64,17 @@ public class Router
       prefixLength = Integer.parseInt(_mask);
    }
 
+   /**
+   * This method is only used for the lookup cmd
+   */
    private String lookUpSplit(String cmd) {
       String[] lookUpSplit = cmd.split("=");
       return lookUpSplit[1];
    }
 
+   /**
+   * This method figures out the range for a starting and ending ip addresses.
+   */
    private void calculate() throws UnknownHostException {
 
       ByteBuffer maskBuffer;
@@ -106,7 +113,10 @@ public class Router
               (endAddress).length());
 
    }
-
+   
+   /**
+   * This method changes targetSize to bytes
+   */
    private byte[] toBytes(byte[] array, int targetSize) {
       int counter = 0;
       List<Byte> octectCalcArray = new ArrayList<Byte>();
@@ -129,7 +139,9 @@ public class Router
    }
 
    /**
-    *
+    * This method adds the an array to the arraylist.  Inside the array 
+    * it has starting ip, ending ip, the mask number, route number, and 
+    * cidr.  
     * @param startIP
     * @param endIP
     * @param mask
@@ -152,7 +164,8 @@ public class Router
    }
 
    /**
-    *
+    * This method takes an ip in the form x.x.x.x as a string and changes it
+    * to a single number in decimal form then returns it as a String
     * @param ip
     * @return
     */
@@ -173,7 +186,8 @@ public class Router
    }
 
    /**
-    *
+    * This method takes a String ip and changes the type to be a long
+    * instead of a string.  
     * @param ip
     * @return
     */
@@ -194,7 +208,7 @@ public class Router
    }
 
    /**
-    *
+    * This method takes an ip and checks if it is in the range of two other ips
     * @param startIP
     * @param endIP
     * @param lookUpIP
@@ -205,7 +219,8 @@ public class Router
    }
 
    /**
-    *
+    * This method takes an ip and finds if it in range of the one address in the
+    * database if so then it returns that route number else it returns -99
     * @param lookUpIP
     * @return
     */
@@ -226,6 +241,9 @@ public class Router
       return Integer.parseInt(route);
    }
 
+   /**
+   * This method checks the database to see if the ip is in it.
+   */
    private boolean contains(String lookUpIp) {
       boolean found = false;
       int i = 0;
@@ -238,6 +256,10 @@ public class Router
       return found;
    }
 
+   /**
+   * This method checks to see if it found ip,
+   * if so then it returns that index otherwise it returns -99
+   */ 
    private int delSearch(String ip) {
       boolean found = false;
       int i = 0;
@@ -252,7 +274,10 @@ public class Router
    }
 
    /**
-    *
+    * This method takes in one command and returns 1 if successful,
+    * returns 0 if unsuccessful for Add and del else it returns the route
+    * number of ip to be looked up  or -99 if it was not found to be in the 
+    * range of the addresses
     * @param cmd
     * @return
     * @throws UnknownHostException
